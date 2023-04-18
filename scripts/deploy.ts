@@ -1,19 +1,19 @@
 import { ethers } from "hardhat";
 
+
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
 
-  const lockedAmount = ethers.utils.parseEther("0.001");
+  const getEscrowFactory = await ethers.getContractFactory("EscrowETH");
+  const escrow = await getEscrowFactory.deploy();
+  console.log("ETH Escrow logic Contract deployed at: " + escrow.address);
 
-  const Lock = await ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
-
-  await lock.deployed();
-
-  console.log(
-    `Lock with ${ethers.utils.formatEther(lockedAmount)}ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
+  const getEscrowProxyFactory = await ethers.getContractFactory("EscrowFactory");
+  const escrowFactory = await getEscrowProxyFactory.deploy(
+    escrow.address,
+    "0x000000000000000000000000000000000000dEaD", // Change with desired address
+    2, // Change with desired fee rate (%)
   );
+  console.log("Escrow Factory Contract deployed at: " + escrowFactory.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
