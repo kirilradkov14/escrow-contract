@@ -6,7 +6,7 @@ import "./libraries/Clones.sol";
 
 /*
 https://github.com/kirilradkov14
-Serves as a factory for creating and managing Escrow contracts for both ETH and ERC20 tokens.
+Serves as a factory for creating and managing Escrow contracts.
 */
 contract EscrowFactory is Ownable{
     address [] public escrows;
