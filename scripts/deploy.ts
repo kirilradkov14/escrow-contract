@@ -3,9 +3,9 @@ import { ethers } from "hardhat";
 
 async function main() {
 
-  const getEscrowFactory = await ethers.getContractFactory("EscrowETH");
+  const getEscrowFactory = await ethers.getContractFactory("Escrow");
   const escrow = await getEscrowFactory.deploy();
-  console.log("ETH Escrow logic Contract deployed at: " + escrow.address);
+  console.log("Escrow logic Contract deployed at: " + escrow.address);
 
   const getEscrowProxyFactory = await ethers.getContractFactory("EscrowFactory");
   const escrowFactory = await getEscrowProxyFactory.deploy(
