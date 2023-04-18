@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.18;
 
 import "./utils/Initializable.sol";
 import "./libraries/Address.sol";
@@ -16,7 +16,7 @@ contract Escrow is Initializable {
     address public payer;
     address public feeTaker;
     uint8 public fee;
-    uint8 public status;
+    uint8 public status = 0;
     uint256 public price;
     uint256 public contractBalance;
 
@@ -37,14 +37,6 @@ contract Escrow is Initializable {
     event Deposited(address indexed _payer, uint256 indexed _amount);
 
     event Refund(address indexed _payer, uint256 indexed _amount);
-
-    receive() external payable {
-        if (status != 1){
-            revert("Unable to deposit.");
-        } else {
-            deposit();
-        }
-    }
 
     function initialize(
         uint8 _fee,
@@ -71,12 +63,12 @@ contract Escrow is Initializable {
     }
 
     function editPrice(uint256 _newPrice) external onlyPayee {
-        require(status == 1, "Edit not currently possible");
+        require(status == 1, "Unable to edit price");
         emit PriceEdit(msg.sender, price, _newPrice);
         price = _newPrice;
     }
 
-    function pay() external onlyPayer {
+    function checkout() external onlyPayer {
         require(status == 2, "Failed to pay.");
 
         status = 3;
